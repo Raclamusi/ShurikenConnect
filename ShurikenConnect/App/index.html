@@ -1,0 +1,157 @@
+<html>
+<head>
+    <title>SPInput</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(0 0 17);
+            touch-action: none;
+        }
+        #circles {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #message {
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            padding: 1rem;
+            user-select: none;
+        }
+        .circle {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: rgb(255 255 255 / 50%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="circles"></div>
+    <div id="message"></div>
+    <script>
+        const circlesDiv = document.getElementById("circles");
+        const messageDiv = document.getElementById("message");
+
+        const circles = [];
+
+        const events = [];
+        let task = null;
+        const sendEvents = () => {
+            if (task) {
+                return;
+            }
+            if (events.length === 0) {
+                return;
+            }
+            task = fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(events)
+            }).then(() => {
+                messageDiv.textContent = "Connected :)";
+            }).catch(error => {
+                messageDiv.textContent = "Disconnected :(";
+                throw error;
+            }).finally(() => {
+                task = null;
+                sendEvents();
+            });
+            events.length = 0;
+        };
+        const pushEvent = data => {
+            events.push(data);
+            sendEvents();
+        };
+
+        const onResize = () => {
+            pushEvent({
+                type: "resize",
+                width: innerWidth,
+                height: innerHeight,
+            });
+        };
+
+        const onChangeTouches = type => event => {
+            const touches = Array.from(event.touches).map(touch => ({
+                id: touch.identifier,
+                x: touch.clientX,
+                y: touch.clientY,
+                a: touch.radiusX ?? touch.webkitRadiusX ?? 1,
+                b: touch.radiusY ?? touch.webkitRadiusY ?? 1,
+                angle: touch.rotationAngle ?? touch.webkitRotationAngle ?? 0,
+                force: touch.force ?? touch.webkitForce ?? 1,
+            }));
+
+            const changedTouches = Array.from(event.changedTouches).map(touch => touch.identifier);
+
+            pushEvent({
+                type,
+                touches,
+                changedTouches,
+            });
+        };
+
+        addEventListener("load", onResize);
+        addEventListener("resize", onResize);
+
+        addEventListener("touchstart", onChangeTouches("touchstart"));
+        addEventListener("touchmove", onChangeTouches("touchmove"));
+        addEventListener("touchend", onChangeTouches("touchend"));
+        addEventListener("touchcancel", onChangeTouches("touchcancel"));
+
+        addEventListener("touchstart", event => {
+            for (const touch of event.changedTouches) {
+                const circle = document.createElement("div");
+                circle.className = "circle";
+                circle.style.left = `${touch.clientX}px`;
+                circle.style.top = `${touch.clientY}px`;
+                circlesDiv.appendChild(circle);
+                if (circles[touch.identifier]) {
+                    circlesDiv.removeChild(circles[touch.identifier]);
+                }
+                circles[touch.identifier] = circle;
+            }
+        });
+        addEventListener("touchmove", event => {
+            for (const touch of event.changedTouches) {
+                const circle = circles[touch.identifier];
+                if (circle) {
+                    circle.style.left = `${touch.clientX}px`;
+                    circle.style.top = `${touch.clientY}px`;
+                }
+            }
+        });
+        addEventListener("touchend", event => {
+            for (const touch of event.changedTouches) {
+                const circle = circles[touch.identifier];
+                if (circle) {
+                    circlesDiv.removeChild(circle);
+                    delete circles[touch.identifier];
+                }
+            }
+        });
+        addEventListener("touchcancel", event => {
+            for (const touch of event.changedTouches) {
+                const circle = circles[touch.identifier];
+                if (circle) {
+                    circlesDiv.removeChild(circle);
+                    delete circles[touch.identifier];
+                }
+            }
+        });
+    </script>
+</body>
+</html>
