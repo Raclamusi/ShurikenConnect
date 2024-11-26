@@ -82,16 +82,16 @@ bool SPInput::parseJSON(const JSON& data)
 {
 	try
 	{
-		for (const auto& [i, event] : data)
+		const auto width = data[U"width"].get<int32>();
+		const auto height = data[U"height"].get<int32>();
+		m_screenSize.x = width;
+		m_screenSize.y = height;
+		for (const auto& [i, event] : data[U"events"])
 		{
 			const auto type = event[U"type"].get<String>();
 			if (type == U"resize")
 			{
-				const auto width = event[U"width"].get<int32>();
-				const auto height = event[U"height"].get<int32>();
 				m_resized = true;
-				m_screenSize.x = width;
-				m_screenSize.y = height;
 			}
 			else if (type.starts_with(U"touch"))
 			{
@@ -107,7 +107,7 @@ bool SPInput::parseJSON(const JSON& data)
 								touch[U"a"].get<double>(),
 								touch[U"b"].get<double>(),
 							},
-							.angle = touch[U"angle"].get<double>(),
+							.angle = Math::ToRadians(touch[U"angle"].get<double>()),
 							.force = touch[U"force"].get<float>(),
 							.id = touch[U"id"].get<int32>(),
 						});
@@ -273,7 +273,6 @@ void SPInput::update()
 	m_endedTouches.clear();
 	m_canceledTouches.clear();
 
-	Print << U"hasSession: " << m_server.hasSession();
 	if (m_server.hasSession())
 	{
 		if (not m_connected)
@@ -346,6 +345,11 @@ URL SPInput::getURL() const
 		return U"";
 	}
 	return U"http://{}:{}/"_fmt(addresses[0], m_port);
+}
+
+uint16 SPInput::port() const noexcept
+{
+	return m_port;
 }
 
 bool SPInput::connected() const noexcept

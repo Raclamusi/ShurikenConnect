@@ -59,7 +59,11 @@
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(events)
+                body: JSON.stringify({
+                    width: screen.width,
+                    height: screen.height,
+                    events,
+                })
             }).then(() => {
                 messageDiv.textContent = "Connected :)";
             }).catch(error => {
@@ -79,16 +83,16 @@
         const onResize = () => {
             pushEvent({
                 type: "resize",
-                width: innerWidth,
-                height: innerHeight,
+                width: screen.width,
+                height: screen.height,
             });
         };
 
         const onChangeTouches = type => event => {
             const touches = Array.from(event.touches).map(touch => ({
                 id: touch.identifier,
-                x: touch.clientX,
-                y: touch.clientY,
+                x: touch.screenX,
+                y: touch.screenY,
                 a: touch.radiusX ?? touch.webkitRadiusX ?? 1,
                 b: touch.radiusY ?? touch.webkitRadiusY ?? 1,
                 angle: touch.rotationAngle ?? touch.webkitRotationAngle ?? 0,

@@ -28,6 +28,11 @@ public:
 	[[nodiscard]]
 	URL getURL() const;
 
+	/// @brief 開いているポート番号を返します。
+	/// @return ポート番号
+	[[nodiscard]]
+	uint16 port() const noexcept;
+
 	/// @brief スマートフォンとの接続が確立しているかを返します。
 	/// @return スマートフォンとの接続が確立している場合 true, それ以外の場合は false
 	[[nodiscard]]
