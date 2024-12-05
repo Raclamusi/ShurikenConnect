@@ -7,7 +7,9 @@
 
 使い方は [ShurikenConnect/Main.cpp](https://github.com/Raclamusi/ShurikenConnect/blob/main/ShurikenConnect/Main.cpp) やヘッダのコメントを参考にしてください。
 
-## サンプル (ShurikenConnect/Main.cpp)
+## 実行ファイル
+
+[Windows 向け実行ファイルをダウンロード](https://github.com/Raclamusi/ShurikenConnect/raw/refs/heads/main/ShurikenConnect.exe)
 
 ### QRコード
 
