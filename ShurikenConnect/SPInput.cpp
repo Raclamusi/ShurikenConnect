@@ -68,6 +68,7 @@ bool SPInput::parseHeader()
 	}
 
 	// Content-Length だけ見る（手抜き）
+	// 本当は大文字・小文字を区別せず探索するべき
 	const auto lengthStart = buffer.find("Content-Length: ", headerStart);
 	if (lengthStart != std::string_view::npos && lengthStart < headerEnd)
 	{
