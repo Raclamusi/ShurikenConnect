@@ -1,4 +1,7 @@
-﻿# include "SPInput.hpp"
+﻿// Copyright (c) 2024 Raclamusi
+// Licensed under the MIT License, see https://github.com/Raclamusi/ShurikenConnect/blob/main/LICENSE .
+
+# include "SPInput.hpp"
 
 void SPInput::sendString(std::string_view startLine)
 {

@@ -1,4 +1,7 @@
-﻿# include <Siv3D.hpp> // Siv3D v0.6.15
+﻿// Copyright (c) 2024 Raclamusi
+// Licensed under the MIT License, see https://github.com/Raclamusi/ShurikenConnect/blob/main/LICENSE .
+
+# include <Siv3D.hpp> // Siv3D v0.6.15
 # include "SPInput.hpp"
 
 enum class Mode

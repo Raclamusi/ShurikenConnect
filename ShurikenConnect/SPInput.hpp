@@ -1,4 +1,7 @@
-﻿# pragma once
+﻿// Copyright (c) 2024 Raclamusi
+// Licensed under the MIT License, see https://github.com/Raclamusi/ShurikenConnect/blob/main/LICENSE .
+
+# pragma once
 
 # include <Siv3D.hpp>
 # include "SPTouch.hpp"
