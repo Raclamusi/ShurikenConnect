@@ -127,6 +127,13 @@ Resource(engine/soundfont/GMGSx.sf2.zstdcmp)
 //
 //////////////////////////////////////////////////////
 Resource(index.html)
+Resource(image/alien_ufo.png)
+Resource(image/computer_smartphone1_icon.png)
+Resource(image/ninja_syuriken1.png)
+Resource(image/ninja_syuriken2.png)
+Resource(image/ninja_syuriken3.png)
+Resource(image/ninja_syuriken4.png)
+Resource(image/ninja_syuriken5.png)
 
 
 
